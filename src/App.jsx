@@ -1,4 +1,4 @@
-import "./App.css"
+import "./App.css";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
@@ -30,6 +30,11 @@ const USERS = [
   { id: 1, name: "สมชาย ใจดี", email: "somchai@dev.com" },
   { id: 2, name: "สมหญิง รักเรียน", email: "somying@dev.com" },
   { id: 3, name: "วิชาญ โค้ดเก่ง", email: "wichan@dev.com" },
+
+  // task1 challenge2 - colorful avatar
+  { id: 4, name: "cColor cTest", email: "ccolor@test.com" },
+  { id: 5, name: "bColor bTest", email: "bcolor@test.com" },
+  { id: 6, name: "aColor aTest", email: "acolor@test.com" },
 ];
 
 function App() {

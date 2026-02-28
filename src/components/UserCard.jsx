@@ -1,4 +1,21 @@
 function UserCard({ name, email }) {
+  // task1 challenge2 - colorful avatar
+  let colorProfile = name.charCodeAt(0) % 3;
+
+  switch (colorProfile) {
+    case 0:
+      colorProfile = "#3182ce";
+      break;
+    case 1:
+      colorProfile = "#38a169";
+      break;
+    case 2:
+      colorProfile = "#805ad5";
+      break;
+    default:
+      colorProfile = "#718096";
+  }
+
   // ดึงตัวอักษรแรกมาทำ avatar
   const initials = name
     .split(" ")
@@ -22,7 +39,7 @@ function UserCard({ name, email }) {
         style={{
           width: "40px",
           height: "40px",
-          background: "#1e40af",
+          background: colorProfile,
           color: "white",
           borderRadius: "50%",
           display: "flex",
