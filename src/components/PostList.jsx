@@ -1,5 +1,6 @@
 import PostCard from "./PostCard";
 import PostCount from "./PostCount";
+import PostSkeleton from "./PostSkeleton";
 
 function PostList({ posts }) {
   return (
@@ -13,10 +14,17 @@ function PostList({ posts }) {
       >
         โพสต์ล่าสุด
       </h2>
+      {/* task1 challenge1 - postcount component */}
       <PostCount count={posts.length} />
-      {posts.map((post) => (
-        <PostCard key={post.id} title={post.title} body={post.body} />
-      ))}
+
+      {/* task1 challenge3 - postskeleton component */}
+      {posts.length === 0 ? (
+        <PostSkeleton />
+      ) : (
+        posts.map((post) => (
+          <PostCard key={post.id} title={post.title} body={post.body} />
+        ))
+      )}
     </div>
   );
 }
