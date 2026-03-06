@@ -12,7 +12,7 @@ function PostSkeleton() {
             padding: "1rem",
             marginBottom: "1rem",
             background: "#e2e8f0",
-            height: "6rem",
+            height: "5rem",
           }}
         >
           <h3
@@ -20,7 +20,7 @@ function PostSkeleton() {
               margin: "0px 0px 0.5rem",
               background: "gray",
               width: "60%",
-              height: "2rem",
+              height: "1rem",
             }}
           ></h3>
           <p

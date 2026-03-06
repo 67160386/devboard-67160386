@@ -2,8 +2,10 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
+import { useState } from "react";
+import AddPostForm from "./components/AddPostForm";
 
-const POSTS = [
+const INITIAL_POSTS = [
   {
     id: 1,
     title: "React คืออะไร?",
@@ -32,15 +34,38 @@ const USERS = [
   { id: 3, name: "วิชาญ โค้ดเก่ง", email: "wichan@dev.com" },
 
   // task1 challenge2 - colorful avatar
-  { id: 4, name: "cColor cTest", email: "ccolor@test.com" },
-  { id: 5, name: "bColor bTest", email: "bcolor@test.com" },
-  { id: 6, name: "aColor aTest", email: "acolor@test.com" },
+  { id: 4, name: "Connie Con", email: "connie@test.com" },
+  { id: 5, name: "Bonnie Bon", email: "bonnie@test.com" },
+  { id: 6, name: "Aonnie Aon", email: "aonnie@test.com" },
 ];
 
 function App() {
+  const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [favorites, setFavorites] = useState([]); // เก็บ id ที่ถูกใจ
+
+  // Toggle ถูกใจ/ยกเลิก
+  function handleToggleFavorite(postId) {
+    setFavorites(
+      (prev) =>
+        prev.includes(postId)
+          ? prev.filter((id) => id !== postId) // ลบออก
+          : [...prev, postId], // เพิ่มเข้า
+    );
+  }
+
+  // เพิ่มโพสต์ใหม่
+  function handleAddPost({ title, body }) {
+    const newPost = {
+      id: Date.now(), // ใช้ timestamp เป็น id ชั่วคราว
+      title,
+      body,
+    };
+    setPosts((prev) => [newPost, ...prev]); // เพิ่มไว้ด้านบน
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar favoriteCount={favorites.length} />
       <div
         style={{
           maxWidth: "900px",
@@ -53,7 +78,12 @@ function App() {
       >
         {/* คอลัมน์ซ้าย: โพสต์ */}
         <div>
-          <PostList posts={POSTS} />
+          <AddPostForm onAddPost={handleAddPost} />
+          <PostList
+            posts={posts}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+          />
         </div>
 
         {/* คอลัมน์ขวา: สมาชิก */}
