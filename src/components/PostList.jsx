@@ -6,10 +6,24 @@ import { useState } from "react";
 function PostList({ posts, favorites, onToggleFavorite }) {
   const [search, setSearch] = useState("");
 
-  // กรองโพสต์ตาม search
-  const filtered = posts.filter((post) =>
-    post.title.toLowerCase().includes(search.toLowerCase()),
-  );
+  {
+    /* task2 challenge2 - Sort posts */
+  }
+  const [sortOrder, setSortOrder] = useState("asc");
+  const toggleSort = () => {
+    setSortOrder((e) => (e === "desc" ? "asc" : "desc")); // desc: ใหม่ก่อน, asc: เก่าก่อน
+  };
+
+  // กรองโพสต์ตาม search และ sort โพสต์
+  const filtered = [...posts] // copy ข้อมูลของ posts
+    .filter((post) => post.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => {
+      if (sortOrder === "desc") {
+        return b.id - a.id; // เรียงโพสต์ใหม่ก่อน
+      } else {
+        return a.id - b.id; // เรียงโพสต์เก่าก่อน
+      }
+    });
 
   return (
     <div>
@@ -49,6 +63,17 @@ function PostList({ posts, favorites, onToggleFavorite }) {
 
       {/* task1 challenge1 - postcount component */}
       <PostCount count={posts.length} />
+
+      {/* task2 challenge2 - Sort posts */}
+      <button
+        onClick={toggleSort}
+        style={{
+          display: "flex",
+          marginBottom: "1rem",
+        }}
+      >
+        {sortOrder === "desc" ? "🔽 ใหม่สุดก่อน" : "🔼 เก่าสุดก่อน"}
+      </button>
 
       {/* task1 challenge3 - postskeleton component */}
       {posts.length === 0 ? (
