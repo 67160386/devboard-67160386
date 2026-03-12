@@ -10,21 +10,23 @@ function PostList({ post, favorites, onToggleFavorite }) {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        setLoading(true);
-        setError(null);
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-        if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-        const data = await res.json();
-        setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
+  // task3 challenge1 - refresh button
+  async function fetchPosts() {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
+      const data = await res.json();
+      setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchPosts();
   }, []); // [] = ทำครั้งเดียวตอน component mount
 
@@ -104,15 +106,20 @@ function PostList({ post, favorites, onToggleFavorite }) {
       <PostCount count={filtered.length} />
 
       {/* task2 challenge2 - Sort posts */}
-      <button
-        onClick={toggleSort}
+      <div
         style={{
           display: "flex",
-          marginBottom: "1rem",
+          margin: "1rem",
+          justifyContent: "space-between",
         }}
       >
-        {sortOrder === "desc" ? "🔽 ใหม่สุดก่อน" : "🔼 เก่าสุดก่อน"}
-      </button>
+        <button onClick={toggleSort}>
+          {sortOrder === "desc" ? "🔽 ใหม่สุดก่อน" : "🔼 เก่าสุดก่อน"}
+        </button>
+
+        {/* task3 challenge1 - refresh button */}
+        <button onClick={fetchPosts}>🔄 โหลดใหม่</button>
+      </div>
 
       {/* task1 challenge3 - postskeleton component */}
       {posts.length === 0 ? (
