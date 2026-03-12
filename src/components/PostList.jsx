@@ -1,15 +1,37 @@
 import PostCard from "./PostCard";
 import PostCount from "./PostCount";
 import PostSkeleton from "./PostSkeleton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import LoadingSpinner from "./LoadingSpinner";
 
-function PostList({ posts, favorites, onToggleFavorite }) {
+function PostList({ post, favorites, onToggleFavorite }) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+        if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
+        const data = await res.json();
+        setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPosts();
+  }, []); // [] = ทำครั้งเดียวตอน component mount
 
   {
     /* task2 challenge2 - Sort posts */
   }
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("desc");
   const toggleSort = () => {
     setSortOrder((e) => (e === "desc" ? "asc" : "desc")); // desc: ใหม่ก่อน, asc: เก่าก่อน
   };
@@ -24,6 +46,23 @@ function PostList({ posts, favorites, onToggleFavorite }) {
         return a.id - b.id; // เรียงโพสต์เก่าก่อน
       }
     });
+
+  if (loading) return <LoadingSpinner />;
+
+  if (error)
+    return (
+      <div
+        style={{
+          padding: "1.5rem",
+          background: "#fff5f5",
+          border: "1px solid #fc8181",
+          borderRadius: "8px",
+          color: "#c53030",
+        }}
+      >
+        เกิดข้อผิดพลาด: {error}
+      </div>
+    );
 
   return (
     <div>
@@ -62,7 +101,7 @@ function PostList({ posts, favorites, onToggleFavorite }) {
       )}
 
       {/* task1 challenge1 - postcount component */}
-      <PostCount count={posts.length} />
+      <PostCount count={filtered.length} />
 
       {/* task2 challenge2 - Sort posts */}
       <button
@@ -83,8 +122,7 @@ function PostList({ posts, favorites, onToggleFavorite }) {
         filtered.map((post) => (
           <PostCard
             key={post.id}
-            title={post.title}
-            body={post.body}
+            post={post}
             isFavorite={favorites.includes(post.id)}
             onToggleFavorite={() => onToggleFavorite(post.id)}
           />
