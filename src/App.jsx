@@ -2,8 +2,10 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
-import { useState } from "react";
 import AddPostForm from "./components/AddPostForm";
+
+// task2 challenge3 - favorites remain
+import { useState, useEffect } from "react";
 
 const INITIAL_POSTS = [
   {
@@ -41,7 +43,19 @@ const USERS = [
 
 function App() {
   const [posts, setPosts] = useState(INITIAL_POSTS);
-  const [favorites, setFavorites] = useState([]); // เก็บ id ที่ถูกใจ
+
+  // task2 challenge3 - favorites remain
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("favorites"); // ดึงข้อมูลมาใช้
+    return saved ? JSON.parse(saved) : [];
+  }); // เก็บ id ที่ถูกใจ
+
+  useEffect(
+    () => {
+      localStorage.setItem("favorites", JSON.stringify(favorites)); // บันทึกข้อมูล
+    },
+    [favorites], // ให้บันทึกตอนที่ favorites เปลี่ยนแปลงเท่านั้น
+  );
 
   // Toggle ถูกใจ/ยกเลิก
   function handleToggleFavorite(postId) {
