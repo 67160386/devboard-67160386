@@ -4,7 +4,7 @@ import PostSkeleton from "./PostSkeleton";
 import { useState, useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
-function PostList({ post, favorites, onToggleFavorite }) {
+function PostList({ onToggleFavorite }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -122,7 +122,7 @@ function PostList({ post, favorites, onToggleFavorite }) {
       </div>
 
       {/* task1 challenge3 - postskeleton component */}
-      {posts.length === 0 ? (
+      {filtered.length === 0 ? (
         <PostSkeleton />
       ) : (
         // แสดงรายการโพสต์
@@ -130,7 +130,7 @@ function PostList({ post, favorites, onToggleFavorite }) {
           <PostCard
             key={post.id}
             post={post}
-            isFavorite={favorites.includes(post.id)}
+            // isFavorite={favorites.includes(post.id)}
             onToggleFavorite={() => onToggleFavorite(post.id)}
           />
         ))

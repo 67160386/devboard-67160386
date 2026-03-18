@@ -12,7 +12,7 @@ function PostSkeleton() {
             padding: "1rem",
             marginBottom: "1rem",
             background: "#e2e8f0",
-            height: "5rem",
+            height: "8rem",
           }}
         >
           <h3
@@ -20,14 +20,14 @@ function PostSkeleton() {
               margin: "0px 0px 0.5rem",
               background: "gray",
               width: "60%",
-              height: "1rem",
+              height: "2rem",
             }}
           ></h3>
           <p
             style={{
               background: "gray",
               width: "75%",
-              height: "1rem",
+              height: "2rem",
               opacity: "50%",
             }}
           ></p>
@@ -35,7 +35,7 @@ function PostSkeleton() {
             style={{
               background: "gray",
               width: "90%",
-              height: "1rem",
+              height: "2rem",
               opacity: "50%",
               marginBottom: "0",
             }}
