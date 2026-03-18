@@ -1,11 +1,23 @@
-import { createContext, useContext, useState } from "react";
+// task4 challenge3 - favorites remain
+import { createContext, useContext, useState, useEffect } from "react";
 
 // 1. สร้าง context object
 const FavoritesContext = createContext();
 
 // 2. Provider component — ครอบ App ทั้งหมด
 export function FavoritesProvider({ children }) {
-  const [favorites, setFavorites] = useState([]);
+  // task4 challenge3 - favorites remain
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem("favorites"); // ดึงข้อมูลมาใช้
+    return saved ? JSON.parse(saved) : [];
+  }); // เก็บ id ที่ถูกใจ
+
+  useEffect(
+    () => {
+      localStorage.setItem("favorites", JSON.stringify(favorites)); // บันทึกข้อมูล
+    },
+    [favorites], // ให้บันทึกตอนที่ favorites เปลี่ยนแปลงเท่านั้น
+  );
 
   function toggleFavorite(postId) {
     setFavorites((prev) =>
