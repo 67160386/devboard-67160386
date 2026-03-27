@@ -22,9 +22,8 @@ function Navbar() {
       <div
         style={{
           display: "flex",
-          gap: "1.5rem",
+          gap: "1rem",
           alignItems: "center",
-          marginLeft: "1rem",
         }}
       >
         <Link to="/" style={{ color: "white", textDecoration: "none" }}>
@@ -32,6 +31,10 @@ function Navbar() {
         </Link>
         <Link to="/profile" style={{ color: "white", textDecoration: "none" }}>
           สมาชิก
+        </Link>
+        {/* task4 challenge2 - search page */}
+        <Link to="/search" style={{ color: "white", textDecoration: "none" }}>
+          ค้นหา
         </Link>
         <Link
           to="/favorites"
