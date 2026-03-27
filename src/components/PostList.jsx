@@ -10,6 +10,14 @@ function PostList({ onToggleFavorite }) {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
 
+  /* task3 challenge2 - pagination */
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
   // task3 challenge1 - refresh button
   async function fetchPosts() {
     try {
@@ -48,6 +56,15 @@ function PostList({ onToggleFavorite }) {
         return a.id - b.id; // เรียงโพสต์เก่าก่อน
       }
     });
+
+  /* task3 challenge2 - pagination */
+  // คำนวณ Pagination จากข้อมูลที่กรองแล้ว
+  const totalPages = Math.ceil(filtered.length / postsPerPage); // Math.ceil(): เป็นการ "ปัดเศษขึ้น"
+  const indexOfLastPost = currentPage * postsPerPage; // ถ้าอยู่ หน้า 1: 1 * 10 = 10 (ตัวสุดท้ายคือ index ที่ 10)
+  const indexOfFirstPost = indexOfLastPost - postsPerPage; // ถ้าอยู่ หน้า 1: 10 - 10 = 0 (เริ่มดึงตั้งแต่ index ที่ 0)
+
+  // ตัดเฉพาะข้อมูลที่จะแสดงในหน้านั้นๆ
+  const currentItems = filtered.slice(indexOfFirstPost, indexOfLastPost); // ถ้าอยู่ หน้า 1: จะดึงข้อมูล Index ที่ 0-9
 
   if (loading) return <LoadingSpinner />;
 
@@ -121,20 +138,49 @@ function PostList({ onToggleFavorite }) {
         <button onClick={fetchPosts}>🔄 โหลดใหม่</button>
       </div>
 
-      {/* task1 challenge3 - postskeleton component */}
-      {filtered.length === 0 ? (
+      {/* task3 challenge2 - pagination */}
+      {/* รายการโพสต์ (ใช้ข้อมูลที่ slice แล้ว) */}
+      {currentItems.length === 0 ? (
+        // task1 challenge3 - postskeleton component
         <PostSkeleton />
       ) : (
         // แสดงรายการโพสต์
-        filtered.map((post) => (
+        currentItems.map((post) => (
           <PostCard
             key={post.id}
             post={post}
-            // isFavorite={favorites.includes(post.id)}
             onToggleFavorite={() => onToggleFavorite(post.id)}
           />
         ))
       )}
+
+      {/* Pagination Button ปุ่มเปลี่ยนหน้า */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
+        <button
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          disabled={currentPage === 1}
+        >
+          ← ก่อนหน้า
+        </button>
+
+        <span>
+          หน้า {currentPage} / {totalPages || 1}
+        </span>
+
+        <button
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={currentPage === totalPages || totalPages === 0}
+        >
+          ถัดไป →
+        </button>
+      </div>
     </div>
   );
 }
