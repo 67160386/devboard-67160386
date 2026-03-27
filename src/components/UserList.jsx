@@ -1,27 +1,18 @@
-import { useState, useEffect } from "react";
 import UserCard from "./UserCard";
 import LoadingSpinner from "./LoadingSpinner";
+// task3 challenge3 - custom hook: usefetch
+import useFetch from "../hooks/useFetch";
 
 function UserList() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const res = await fetch("https://jsonplaceholder.typicode.com/users");
-        const data = await res.json();
-        setUsers(data);
-      } catch {
-        // ไม่แสดง error ในตัวอย่างนี้ (นักศึกษาลองเพิ่มเองได้)
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUsers();
-  }, []);
+  const {
+    data: users,
+    loading,
+    error,
+  } = useFetch("https://jsonplaceholder.typicode.com/users");
 
   if (loading) return <LoadingSpinner />;
+
+  if (error) return <div>เกิดข้อผิดพลาด: {error}</div>;
 
   return (
     <div>

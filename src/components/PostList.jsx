@@ -1,42 +1,25 @@
 import PostCard from "./PostCard";
 import PostCount from "./PostCount";
 import PostSkeleton from "./PostSkeleton";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
+// task3 challenge3 - custom hook: usefetch
+import useFetch from "../hooks/useFetch"; // import hook มาใช้
 
 function PostList({ onToggleFavorite }) {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // task3 challenge3 - custom hook: usefetch
+  const {
+    data: posts,
+    loading,
+    error,
+    refetch,
+  } = useFetch("https://jsonplaceholder.typicode.com/posts");
+
   const [search, setSearch] = useState("");
 
   /* task3 challenge2 - pagination */
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
-
-  // task3 challenge1 - refresh button
-  async function fetchPosts() {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-      const data = await res.json();
-      setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchPosts();
-  }, []); // [] = ทำครั้งเดียวตอน component mount
 
   {
     /* task2 challenge2 - Sort posts */
@@ -47,7 +30,8 @@ function PostList({ onToggleFavorite }) {
   };
 
   // กรองโพสต์ตาม search และ sort โพสต์
-  const filtered = [...posts] // copy ข้อมูลของ posts
+  const filtered = posts
+    .slice(0, 20) // copy ข้อมูลของ posts จำกัด 20 รายการ
     .filter((post) => post.title.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => {
       if (sortOrder === "desc") {
@@ -135,7 +119,7 @@ function PostList({ onToggleFavorite }) {
         </button>
 
         {/* task3 challenge1 - refresh button */}
-        <button onClick={fetchPosts}>🔄 โหลดใหม่</button>
+        <button onClick={refetch}>🔄 โหลดใหม่</button>
       </div>
 
       {/* task3 challenge2 - pagination */}
